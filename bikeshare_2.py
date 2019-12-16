@@ -275,7 +275,7 @@ def main():
             if restart.lower() == 'n':
                 break
 
-
+        #catch any errors including those raised from functions
         except Exception as e:
             print('\nError Encountered : {}\n'.format(e))
 
