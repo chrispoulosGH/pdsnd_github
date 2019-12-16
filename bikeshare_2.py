@@ -223,7 +223,15 @@ def display_data(df):
 
         prev_direction='f'
         print('Raw Data Display')
-        pageSize=int(input('Enter in a numeric for page size. '))
+
+        while True:
+           try:
+              pageSize=int(input('Enter in a numeric for page size. '))
+              break
+           except Exception as e:
+              print('\nError Encountered processing page size: {}.'.format(e))
+              continue
+
         end=pageSize-1
         while True:
             ans=input('Enter F to page {} records forward, B to page {} records back, N to stop.'.format(pageSize,pageSize))
@@ -231,14 +239,14 @@ def display_data(df):
                 break;
             if ans.lower()=='f':
                 if prev_direction=='b':
-                   begin+=pageSize               #move fwd 5 from prev direction adjustment
+                   begin+=pageSize               #move fwd page size from prev direction adjustment
                    end+=pageSize
                 prev_direction='f'
                 print(df.loc[begin:end])
                 begin+=pageSize
                 end+=pageSize
             if ans.lower()=='b':
-                if prev_direction=='f':   #move back 5 from prev direction adjustment
+                if prev_direction=='f':   #move back page size from prev direction adjustment
                     begin-=pageSize
                     end-=pageSize
                     prev_direction='b'
