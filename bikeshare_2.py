@@ -3,10 +3,10 @@ import pandas as pd
 import numpy as np
 import statistics as st
 
-CITY_DATA = { 'chicago': './data/chicago.csv',
-              'new york city': './data/new_york_city.csv',
-              'washington': './data/washington.csv',
-              'test': './data/test.csv' }
+CITY_DATA = { 'chicago': 'chicago.csv',
+              'new york city': 'new_york_city.csv',
+              'washington': 'washington.csv',
+              'test': 'test.csv' }
 
 def get_filters():
     """
@@ -220,32 +220,42 @@ def display_data(df):
     """diplay 5 records at a time moving or forward back dependent on user input."""
     try:
         begin=0
-        end=4
+
         prev_direction='f'
         print('Raw Data Display')
+
         while True:
-            ans=input('Enter F to page 5 records forward, B to page 5 records back, N to stop.')
+           try:
+              pageSize=int(input('Enter in a numeric for page size. '))
+              break
+           except Exception as e:
+              print('\nError Encountered processing page size: {}.'.format(e))
+              continue
+
+        end=pageSize-1
+        while True:
+            ans=input('Enter F to page {} records forward, B to page {} records back, N to stop.'.format(pageSize,pageSize))
             if ans.lower()=='n':
                 break;
             if ans.lower()=='f':
                 if prev_direction=='b':
-                   begin+=5               #move fwd 5 from prev direction adjustment
-                   end+=5
+                   begin+=pageSize               #move fwd page size from prev direction adjustment
+                   end+=pageSize
                 prev_direction='f'
                 print(df.loc[begin:end])
-                begin+=5
-                end+=5
+                begin+=pageSize
+                end+=pageSize
             if ans.lower()=='b':
-                if prev_direction=='f':   #move back 5 from prev direction adjustment
-                    begin-=5
-                    end-=5
+                if prev_direction=='f':   #move back page size from prev direction adjustment
+                    begin-=pageSize
+                    end-=pageSize
                     prev_direction='b'
-                if end<=4:                #adjust if pointer is at read size or less
+                if end<=pageSize-1:                #adjust if pointer is at read size or less
                     begin=0
-                    end=4
+                    end=pageSize-1
                 else:
-                    begin-=5
-                    end-=5
+                    begin-=pageSize
+                    end-=pageSize
                     print(df.loc[begin:end])
 
     except Exception as e:
